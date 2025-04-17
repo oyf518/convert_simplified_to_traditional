@@ -8,7 +8,10 @@ cc = OpenCC('s2t')  # 簡體轉繁體
 # 要掃描的文件擴展名
 EXTENSIONS = {'.tsx', '.ts', '.js', '.jsx', '.json', '.md', '.txt'}
 # 目標目錄
-TARGET_DIR = '/Users/jfoy/Desktop/projects/crm_react/src'
+TARGET_DIR = '/Users/jfoy/Desktop/projects/crm_react'
+
+# 排除的目錄
+EXCLUDED_DIRS = {'node_modules', '.git'}
 
 # 簡體中文正則表達式
 ZH_CN_PATTERN = re.compile(r'[\u4e00-\u9fa5]+')
@@ -35,6 +38,10 @@ def convert_file(file_path):
 def scan_and_convert(directory):
     """遞歸掃描目錄並轉換文件"""
     for root, _, files in os.walk(directory):
+        # 檢查是否在排除的目錄中
+        if any(excluded_dir in root for excluded_dir in EXCLUDED_DIRS):
+            continue
+        
         for file in files:
             if os.path.splitext(file)[1] in EXTENSIONS:
                 file_path = os.path.join(root, file)
